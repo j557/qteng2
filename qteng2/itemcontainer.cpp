@@ -7,7 +7,7 @@
 #include <QDateTime>
 #include <QDir>
 #include "item.h"
-
+#include "databasemanager.h"
 
 bool defaultSortLessOperator( Item* i1, Item* i2 )
 {
@@ -32,82 +32,30 @@ bool ItemContainer::load( const QString& filename )
 {
     clear();
 
-    if( !filename.length() )
+    DatabaseManager& dbMan = DatabaseManager::getInstance();
+    if( !dbMan.open( filename ) )
     {
-        qDebug("DB ERROR: empty filename");
         return false;
     }
 
-    m_filename = filename;
+    m_questionsCount = dbMan.irreversableItemCount() +  2 * dbMan.reversableItemCount();
 
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName( m_filename );
+    const int ITEMS_COUNT = dbMan.irreversableItemCount() + dbMan.reversableItemCount();
 
-    // Open databasee
-    if( !db.open() )
+    for( int i = 0; i < ITEMS_COUNT; ++i )
     {
-        qDebug("DB ERROR: open error");
-        return false;
-    }
-
-    bool ok;
-    QSqlQuery checkTableQuery("SELECT count(*) FROM sqlite_master WHERE type='table' AND name='Item'");
-    checkTableQuery.next();
-    QVariant val = checkTableQuery.value(0);
-    qlonglong value = val.toULongLong(&ok);
-
-    if( !ok || value != 1 )
-    {
-        qDebug("DB ERROR: scheme error");
-        db.close();
-        return false;
-    }
-
-    //count how many items is in database
-    QSqlQuery countQuery("select count(*) from Item");
-    countQuery.next();
-    val = countQuery.value(0);
-    qlonglong valueCount = val.toULongLong(&ok);
-
-    //and how many of them is reversable (these will be splitted to two separate items)
-    QSqlQuery countReversableQuery("select count(*) from Item where reversable='true'");
-    countReversableQuery.next();
-    val = countReversableQuery.value(0);
-    qlonglong valueReversable = val.toULongLong(&ok);
-
-    m_questionsCount = valueCount + valueReversable;
-
-    m_items.reserve(m_questionsCount);
-
-    QSqlQuery selectQuery("select id,question,answer,example,reversable,timesAsked,"
-                          "timesCorrect,timesAskedReversed,timesCorrectReversed from Item");
-    while( selectQuery.next() )
-    {
-        QVariant id  = selectQuery.value(0);
-        QVariant que = selectQuery.value(1);
-        QVariant ans = selectQuery.value(2);
-        QVariant exm = selectQuery.value(3);
-        QVariant rev = selectQuery.value(4);
-        QVariant ta  = selectQuery.value(5);
-        QVariant tc  = selectQuery.value(6);
-        QVariant tar = selectQuery.value(7);
-        QVariant tcr = selectQuery.value(8);
-
-        //TODO:add maybe some error checking here
-        bool reversed = rev.toBool();
-
-        Item* i = new Item(id.toInt(NULL), que.toString(), ans.toString(), exm.toString(),
-                           false, ta.toInt(NULL), tc.toInt(NULL) );
-        m_items.append(i);
-
-        if( reversed )
+        Item* item = NULL;
+        Item* revItem = NULL;
+        dbMan.itemsAtIndex(i, &item, &revItem);
+        if( item )
         {
-            Item* i = new Item(id.toInt(NULL), que.toString(), ans.toString(), exm.toString(),
-                               true, tar.toInt(NULL), tcr.toInt(NULL) );
-            m_items.append(i);
+            m_items.append( item );
+        }
+        if( revItem )
+        {
+            m_items.append( revItem );
         }
     }
-    db.close();
 
     qSort( m_items.begin(), m_items.end(), defaultSortLessOperator );
 

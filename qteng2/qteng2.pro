@@ -34,7 +34,8 @@ SOURCES += main.cpp \
     mainwindow.cpp \
     itemcontainer.cpp \
     item.cpp \
-    editdialog.cpp
+    editdialog.cpp \
+    databasemanager.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -44,7 +45,8 @@ HEADERS += \
     mainwindow.h \
     itemcontainer.h \
     item.h \
-    editdialog.h
+    editdialog.h \
+    databasemanager.h
 
 FORMS += \
     mainwindow.ui \
