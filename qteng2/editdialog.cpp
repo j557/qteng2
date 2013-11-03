@@ -53,15 +53,7 @@ void EditDialog::on_pushButtonNext_clicked()
 
 void EditDialog::showNextItem()
 {
-    if(m_currentItemIdx >= itemCount() - 1 )
-    {
-        //TODO: assert?
-        qDebug("Next button should be disabled. Ignore");
-        return;
-    }
-
-    m_currentItemIdx++;
-    updateFieldsToCurrentElement();
+    showItemAtIndex( m_currentItemIdx + 1 );
 }
 
 void EditDialog::on_pushButtonPrev_clicked()
@@ -71,15 +63,7 @@ void EditDialog::on_pushButtonPrev_clicked()
 
 void EditDialog::showPrevItem()
 {
-    if(m_currentItemIdx <= 0 )
-    {
-        //TODO: assert?
-        qDebug("Prev button should be disabled. Ignore");
-        return;
-    }
-
-    m_currentItemIdx--;
-    updateFieldsToCurrentElement();
+    showItemAtIndex( m_currentItemIdx - 1 );
 }
 
 int EditDialog::itemCount()
@@ -90,6 +74,18 @@ int EditDialog::itemCount()
 
 void EditDialog::on_horizontalSliderCounter_valueChanged(int val)
 {
-    m_currentItemIdx = val;
+    showItemAtIndex( val );
+}
+
+void EditDialog::showItemAtIndex( int idx )
+{
+    if(idx < 0 || idx > itemCount() - 1 )
+    {
+        //TODO: assert?
+        qDebug("Item index out of bounds disabled. Ignore");
+        return;
+    }
+
+    m_currentItemIdx = idx;
     updateFieldsToCurrentElement();
 }

@@ -27,6 +27,7 @@ private:
     void updateCounter();
     void showNextItem();
     void showPrevItem();
+    void showItemAtIndex( int idx );
     int  itemCount();
 
 private:
