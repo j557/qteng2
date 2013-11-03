@@ -33,7 +33,8 @@ symbian:TARGET.CAPABILITY += NetworkServices
 SOURCES += main.cpp \
     mainwindow.cpp \
     itemcontainer.cpp \
-    item.cpp
+    item.cpp \
+    editdialog.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -42,9 +43,11 @@ qtcAddDeployment()
 HEADERS += \
     mainwindow.h \
     itemcontainer.h \
-    item.h
+    item.h \
+    editdialog.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    editdialog.ui
 
 QT += sql

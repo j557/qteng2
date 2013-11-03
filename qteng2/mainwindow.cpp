@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QFileDialog>
 #include "itemcontainer.h"
+#include "editdialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -36,4 +37,10 @@ void MainWindow::menuLoad()
         //loadFile(fileName);
     }
 
+}
+
+void MainWindow::menuEdit()
+{
+    EditDialog* dlg = new EditDialog(this);
+    dlg->exec();
 }

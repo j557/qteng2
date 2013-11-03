@@ -128,7 +128,8 @@
     </property>
     <addaction name="actionNew"/>
     <addaction name="actionLoad"/>
-    <addaction name="actionExit"/>
+    <addaction name="actionEdit"/>
+    <addaction name="actionQuit"/>
    </widget>
    <addaction name="menuQtEng2"/>
   </widget>
@@ -141,9 +142,9 @@
     <string>Ctrl+L</string>
    </property>
   </action>
-  <action name="actionExit">
+  <action name="actionQuit">
    <property name="text">
-    <string>Exit</string>
+    <string>Quit</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
@@ -155,6 +156,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="actionEdit">
+   <property name="text">
+    <string>Edit</string>
    </property>
   </action>
  </widget>
@@ -176,10 +182,27 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionEdit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>menuEdit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>262</x>
+     <y>200</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>menuNew()</slot>
   <slot>menuLoad()</slot>
-  <slot>menuExit()</slot>
+  <slot>menuQuit()</slot>
+  <slot>menuEdit()</slot>
  </slots>
 </ui>

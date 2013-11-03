@@ -20,6 +20,7 @@ public:
 private slots:
     void on_buttonCheck_clicked();
     void menuLoad();
+    void menuEdit();
 
 private:
     ItemContainer* m_itemContainer;
