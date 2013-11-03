@@ -95,7 +95,7 @@
     <string>Example</string>
    </property>
   </widget>
-  <widget class="QSlider" name="horizontalSlider">
+  <widget class="QSlider" name="horizontalSliderCounter">
    <property name="geometry">
     <rect>
      <x>39</x>
