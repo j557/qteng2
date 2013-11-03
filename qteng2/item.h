@@ -26,6 +26,7 @@ public:
     const QString& GetQuestion() const { return m_question; }
     const QString& GetAnswer() const { return m_answer; }
     const QString& GetExample() const { return m_example; }
+    unsigned int GetId() const { return m_id; }
 
 	float GetRank() const;
 
