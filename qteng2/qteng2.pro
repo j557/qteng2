@@ -31,14 +31,20 @@ symbian:TARGET.CAPABILITY += NetworkServices
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    itemcontainer.cpp \
+    item.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
 qtcAddDeployment()
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h \
+    itemcontainer.h \
+    item.h
 
 FORMS += \
     mainwindow.ui
+
+QT += sql

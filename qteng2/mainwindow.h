@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+class ItemContainer;
+
 namespace Ui {
 class MainWindow;
 }
@@ -20,6 +22,7 @@ private slots:
     void menuLoad();
 
 private:
+    ItemContainer* m_itemContainer;
     Ui::MainWindow *ui;
 };
 
