@@ -2,7 +2,15 @@
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlDatabase>
 #include <QVariant>
+#include <QDebug>
 #include "item.h"
+
+QString StringWithCorrectedQuotes( const QString& src )
+{
+    QString dst(src);
+    dst.replace('\'', "''");
+    return dst;
+}
 
 DatabaseManager::DatabaseManager()
 : m_query( NULL )
@@ -120,4 +128,55 @@ void DatabaseManager::itemsAtIndex(int idx, Item** item, Item** revItem)
     {
         *revItem = new Item(id.toInt(NULL), que.toString(), ans.toString(), exm.toString(), true, tar.toInt(NULL), tcr.toInt(NULL) );
     }
+}
+
+bool DatabaseManager::updateItem( unsigned int id,
+                                  const QString& question,
+                                  const QString& answer,
+                                  const QString& example,
+                                  bool reversable,
+                                  unsigned int asked,
+                                  unsigned int answered,
+                                  unsigned int reversedAsked,
+                                  unsigned int reversedAnswered )
+{
+    QString queryString = QString("select count(*) from Item where id=%1").arg(id);
+    QSqlQuery query(queryString);
+    query.next();
+    QVariant val = query.value(0);
+    bool ok;
+    qlonglong value = val.toULongLong(&ok);
+    if( !ok || (value != 1) )
+    {
+        qDebug("DB ERROR: didn't find element to be updated in database");
+        return false;
+    }
+
+    QString updateQueryString = QString("update Item set question='%1',answer='%2',example='%3',"
+                                        "reversable=%4,timesAsked=%5,timesCorrect=%6,"
+                                        "timesAskedReversed=%7,timesCorrectReversed=%8 where id=%9")
+            .arg( StringWithCorrectedQuotes(question) )
+            .arg( StringWithCorrectedQuotes(answer) )
+            .arg( StringWithCorrectedQuotes(example) )
+            .arg( reversable ? "'true'" : "'false'" )
+            .arg( asked )
+            .arg( answered )
+            .arg( reversedAsked )
+            .arg( reversedAnswered )
+            .arg( id );
+
+    qDebug() << "UPDATE QUERY STRING:\n" << updateQueryString;
+
+    QSqlQuery updateQuery;
+    ok = updateQuery.exec(updateQueryString);
+    if( !ok )
+    {
+        qDebug("DB ERROR: error during updating item");
+        return false;
+    }
+
+    delete m_query;
+    m_query = NULL;
+
+    return true;
 }

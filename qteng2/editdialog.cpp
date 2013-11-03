@@ -1,5 +1,6 @@
 #include "editdialog.h"
 #include "ui_editdialog.h"
+#include <QDebug>
 #include "databasemanager.h"
 #include "item.h"
 
@@ -20,10 +21,12 @@ EditDialog::~EditDialog()
 
 void EditDialog::updateCounter()
 {
+    ui->horizontalSliderCounter->blockSignals(true);
     ui->horizontalSliderCounter->setMinimum( 0 );
     ui->horizontalSliderCounter->setMaximum( itemCount() - 1 );
     ui->horizontalSliderCounter->setValue( m_currentItemIdx );
     ui->labelCounter->setText( QString("%1 / %2").arg(m_currentItemIdx+1).arg(itemCount()) );
+    ui->horizontalSliderCounter->blockSignals(false);
 }
 
 void EditDialog::updateFieldsToCurrentElement()
@@ -86,6 +89,40 @@ void EditDialog::showItemAtIndex( int idx )
         return;
     }
 
+    updateElementInDatabase();
     m_currentItemIdx = idx;
     updateFieldsToCurrentElement();
+}
+
+void EditDialog::updateElementInDatabase()
+{
+    //check if any changes
+    bool isDifferent = false;
+    bool isRevChecked = (ui->checkBoxReversable->checkState() == Qt::Checked);
+    isDifferent = isDifferent || (bool)(ui->textEditQuestion->toPlainText().compare( m_currentItem->GetQuestion() ));
+    isDifferent = isDifferent || (bool)(ui->textEditAnswer->toPlainText().compare( m_currentItem->GetAnswer() ));
+    isDifferent = isDifferent || (bool)(ui->textEditExample->toPlainText().compare( m_currentItem->GetExample() ));
+    isDifferent = isDifferent || (isRevChecked ^ (m_currentItemRev != NULL) );
+
+    if( !isDifferent )
+    {
+        return;
+    }
+
+    //update element
+    int id = m_currentItem->GetId();
+    const QString& q = ui->textEditQuestion->toPlainText();
+    const QString& a = ui->textEditAnswer->toPlainText();
+    const QString& e = ui->textEditExample->toPlainText();
+    bool r = isRevChecked;
+    unsigned int as = m_currentItem->GetAsked();
+    unsigned int an = m_currentItem->GetAnswered();
+    unsigned int ras = m_currentItemRev ? m_currentItemRev->GetAsked() : 0;
+    unsigned int ran = m_currentItemRev ? m_currentItemRev->GetAnswered() : 0;
+    if( !DatabaseManager::getInstance().updateItem(id, q, a, e, r, as, an, ras, ran) )
+    {
+        qDebug() << "Something went wrong with updating element " << id;
+        //TODO: handle error (dialog or something)
+    }
+
 }

@@ -29,6 +29,7 @@ private:
     void showPrevItem();
     void showItemAtIndex( int idx );
     int  itemCount();
+    void updateElementInDatabase();
 
 private:
     Ui::EditDialog *ui;

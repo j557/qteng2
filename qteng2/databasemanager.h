@@ -21,6 +21,16 @@ public:
     qulonglong reversableItemCount();
     void itemsAtIndex(int idx, Item** item, Item** revItem);
 
+    bool updateItem( unsigned int id,
+                     const QString& question,
+                     const QString& answer,
+                     const QString& example,
+                     bool reversable,
+                     unsigned int asked,
+                     unsigned int answered,
+                     unsigned int reversedAsked = 0,
+                     unsigned int reversedAnswered = 0 );
+
 private:
     DatabaseManager();
     DatabaseManager(DatabaseManager const&);

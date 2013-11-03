@@ -16,13 +16,6 @@ bool defaultSortLessOperator( Item* i1, Item* i2 )
     return r1 < r2;
 }
 
-QString StringWithCorrectedQuotes( const QString& src )
-{
-    QString dst(src);
-    dst.replace('\'', "''");
-    return dst;
-}
-
 ItemContainer::ItemContainer()
 {
     clear();
