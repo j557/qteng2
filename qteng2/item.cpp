@@ -1,7 +1,7 @@
 #include "item.h"
 //#include "randomizer.h"
 
-Item::Item( unsigned int id,
+Item::Item( int id,
             const QString& question,
             const QString& answer,
             const QString& example,

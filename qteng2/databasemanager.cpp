@@ -130,7 +130,7 @@ void DatabaseManager::itemsAtIndex(int idx, Item** item, Item** revItem)
     }
 }
 
-bool DatabaseManager::updateItem( unsigned int id,
+bool DatabaseManager::updateItem( int id,
                                   const QString& question,
                                   const QString& answer,
                                   const QString& example,
@@ -180,3 +180,37 @@ bool DatabaseManager::updateItem( unsigned int id,
 
     return true;
 }
+
+bool DatabaseManager::insertItem( const QString& question,
+                                  const QString& answer,
+                                  const QString& example,
+                                  bool reversable )
+{
+    QString insertQueryString = QString("insert into Item(question,answer,example,reversable,timesAsked,"
+                                        "timesCorrect,timesAskedReversed,timesCorrectReversed) values "
+                                        "('%1','%2','%3',%4,%5,%6,%7,%8)")
+            .arg( StringWithCorrectedQuotes(question) )
+            .arg( StringWithCorrectedQuotes(answer) )
+            .arg( StringWithCorrectedQuotes(example) )
+            .arg( reversable ? "'true'" : "'false'" )
+            .arg( 0 )
+            .arg( 0 )
+            .arg( 0 )
+            .arg( 0 );
+
+    qDebug() << "INSERT QUERY STRING:\n" << insertQueryString;
+
+    QSqlQuery insertQuery;
+    bool ok = insertQuery.exec(insertQueryString);
+    if( !ok )
+    {
+        qDebug("DB ERROR: error during inserting item");
+        return false;
+    }
+
+    delete m_query;
+    m_query = NULL;
+
+    return true;
+}
+

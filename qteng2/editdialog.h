@@ -21,6 +21,7 @@ private slots:
     void on_pushButtonNext_clicked();
     void on_pushButtonPrev_clicked();
     void on_horizontalSliderCounter_valueChanged(int val);
+    void on_pushButtonNew_clicked();
 
 private:
     void updateFieldsToCurrentElement();
@@ -30,12 +31,15 @@ private:
     void showItemAtIndex( int idx );
     int  itemCount();
     void updateElementInDatabase();
+    void createNewItem( const QString& question = QString(), const QString& answer = QString(), const QString& example = QString() );
+    bool isNewElementEdited() const;
 
 private:
     Ui::EditDialog *ui;
     int m_currentItemIdx;
     Item* m_currentItem;
     Item* m_currentItemRev;
+
 };
 
 #endif // EDITDIALOG_H

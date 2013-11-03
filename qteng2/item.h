@@ -7,7 +7,7 @@ class Item
 {
 
 public:
-    Item( unsigned int id,
+    Item( int id,
           const QString& question,
           const QString& answer,
           const QString& example,
@@ -26,14 +26,14 @@ public:
     const QString& GetQuestion() const { return m_question; }
     const QString& GetAnswer() const { return m_answer; }
     const QString& GetExample() const { return m_example; }
-    unsigned int GetId() const { return m_id; }
+    int GetId() const { return m_id; }
 
 	float GetRank() const;
 
 	static bool CompareDebug(const Item* i1, const Item* i2);
 
 private:
-    unsigned int m_id;
+             int m_id;
 	unsigned int m_asked;
 	unsigned int m_answered;
 
