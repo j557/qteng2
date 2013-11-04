@@ -135,7 +135,7 @@ int ItemContainer::getNumberOfCorrectAnswers() const
 
 int ItemContainer::getNumberOfIncorrectAnswers() const
 {
-    return m_correctCount;
+    return m_wrongCount;
 }
 
 int ItemContainer::getNumberOfQuestionsLeft() const
