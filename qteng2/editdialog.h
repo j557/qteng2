@@ -22,6 +22,7 @@ private slots:
     void on_pushButtonPrev_clicked();
     void on_horizontalSliderCounter_valueChanged(int val);
     void on_pushButtonNew_clicked();
+    void on_pushButtonDone_clicked();
 
 private:
     void updateFieldsToCurrentElement();

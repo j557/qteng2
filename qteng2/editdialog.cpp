@@ -184,3 +184,13 @@ bool EditDialog::isNewElementEdited() const
 {
     return (m_currentItem && (m_currentItem->GetId() < 0));
 }
+
+void EditDialog::on_pushButtonDone_clicked()
+{
+    //save changes in current element
+    if( m_currentItem )//may be null if database is empty
+    {
+        updateElementInDatabase();
+    }
+    close();
+}
