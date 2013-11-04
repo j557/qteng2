@@ -8,6 +8,7 @@
 #include <QDir>
 #include "item.h"
 #include "databasemanager.h"
+#include "randomizer.h"
 
 bool defaultSortLessOperator( Item* i1, Item* i2 )
 {
@@ -105,20 +106,20 @@ const Item* ItemContainer::getCurrentQuestion() const
 
 void ItemContainer::currentQuestionAnsweredProperly()
 {
-    m_answered++;
+    m_correctCount++;
     assert( m_currentItem );
     m_currentItem->IncreaseAnswered();
 
-    m_answeredItems.append( m_currentItem );
+    DatabaseManager::getInstance().updateItemRank( *m_currentItem );
     m_items.pop_front();
 }
 
 void ItemContainer::currentQuestionAnsweredNotProperly()
 {
-    //TODO:
+    m_wrongCount++;
     //question will be asked again, so add it to some random place in list
-//    int rand = Randomizer::getInt( m_items.size() - 1 );
-//    m_items.insert( rand, m_currentItem );
+    int rand = Randomizer::getInt( m_items.size() - 1 );
+    m_items.insert( rand, m_currentItem );
     m_items.pop_front();
 }
 
@@ -129,7 +130,12 @@ int ItemContainer::getNumberOfAskedQuestions() const
 
 int ItemContainer::getNumberOfCorrectAnswers() const
 {
-    return m_answered;
+    return m_correctCount;
+}
+
+int ItemContainer::getNumberOfIncorrectAnswers() const
+{
+    return m_correctCount;
 }
 
 int ItemContainer::getNumberOfQuestionsLeft() const
@@ -149,9 +155,9 @@ void ItemContainer::clear()
     m_filename = QString();
     qDeleteAll( m_items );
     m_items.clear();
-    m_answeredItems.clear();
     m_asked        = 0;
-    m_answered     = 0;
+    m_correctCount = 0;
+    m_wrongCount   = 0;
     m_currentItem  = NULL;
     m_nextPrepared = false;
 }

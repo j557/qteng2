@@ -33,6 +33,9 @@ public:
     /* return number of correct answers. */
     virtual int getNumberOfCorrectAnswers() const     = 0;
 
+    /* return number of incorrect answers. */
+    virtual int getNumberOfIncorrectAnswers() const     = 0;
+
     /* return number of questions that are left to be asked.
      * Negative value indicates, that number of questions left cannot
      * be specified. Note, that depended on container algorithm,
@@ -64,6 +67,7 @@ public: //ItemsContainerInterface
     virtual void currentQuestionAnsweredNotProperly();
     virtual int  getNumberOfAskedQuestions() const;
     virtual int  getNumberOfCorrectAnswers() const;
+    virtual int  getNumberOfIncorrectAnswers() const;
     virtual int  getNumberOfQuestionsLeft() const;
     virtual int  getNumberOfQuestionsTotal() const;
     virtual bool create( const QString& filename );
@@ -76,11 +80,11 @@ private:
 private:
             QString            m_filename;
     mutable int                m_asked;
-            int                m_answered;
+            int                m_correctCount;
+            int                m_wrongCount;
     mutable bool               m_nextPrepared;
             Item*              m_currentItem;
             ItemList           m_items;
-            ItemList           m_answeredItems;
             int                m_questionsCount;
 };
 

@@ -162,8 +162,36 @@ void DatabaseManager::itemsAtIndex(int idx, Item** item, Item** revItem)
 
     if( reversed )
     {
-        *revItem = new Item(id.toInt(NULL), que.toString(), ans.toString(), exm.toString(), true, tar.toInt(NULL), tcr.toInt(NULL) );
+        *revItem = new Item(id.toInt(NULL), ans.toString(), que.toString(), exm.toString(), true, tar.toInt(NULL), tcr.toInt(NULL) );
     }
+}
+
+bool DatabaseManager::updateItemRank( const Item& item )
+{
+    QString askedParam = item.GetIsReversed() ? "timesAskedReversed" : "timesAsked";
+    QString correctParam = item.GetIsReversed() ? "timesCorrectReversed" : "timesCorrect";
+
+    QString updateQueryString = QString("update Item set %1=%2,%3=%4 where id=%5")
+            .arg( askedParam )
+            .arg( item.GetAsked() )
+            .arg( correctParam )
+            .arg( item.GetAnswered() )
+            .arg( item.GetId() );
+
+    qDebug() << "UPDATE QUERY STRING:\n" << updateQueryString;
+
+    QSqlQuery updateQuery;
+    bool ok = updateQuery.exec(updateQueryString);
+    if( !ok )
+    {
+        qDebug("DB ERROR: error during updating item");
+        return false;
+    }
+
+    delete m_query;
+    m_query = NULL;
+
+    return true;
 }
 
 bool DatabaseManager::updateItem( int id,

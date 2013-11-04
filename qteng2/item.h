@@ -27,6 +27,7 @@ public:
     const QString& GetAnswer() const { return m_answer; }
     const QString& GetExample() const { return m_example; }
     int GetId() const { return m_id; }
+    bool GetIsReversed() const { return m_reversed; }
 
 	float GetRank() const;
 

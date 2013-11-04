@@ -18,13 +18,18 @@ public:
     ~MainWindow();
     
 private slots:
-    void on_buttonCheck_clicked();
     void menuNew();
     void menuLoad();
     void menuEdit();
+    void on_pushButtonCheck_clicked();
+    void on_pushButtonWrong_clicked();
+    void on_pushButtonCorrect_clicked();
 
 private:
     void displayEditDialog();
+    void startNewGame( bool reloadItemContainer );
+    void setInformationLabels();
+    void displayNextQuestion();
 
 private:
     ItemContainer* m_itemContainer;

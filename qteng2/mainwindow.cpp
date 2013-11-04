@@ -4,6 +4,7 @@
 #include <QMessageBox>
 #include <QDebug>
 #include "itemcontainer.h"
+#include "item.h"
 #include "editdialog.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -12,8 +13,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
 
     ui->setupUi(this);
-    ui->buttonCorrect->setVisible(false);
-    ui->buttonWrong->setVisible(false);
+    ui->pushButtonCorrect->setVisible(false);
+    ui->pushButtonWrong->setVisible(false);
     ui->actionEdit->setEnabled(false);
 
     m_itemContainer = new ItemContainer();
@@ -23,13 +24,6 @@ MainWindow::~MainWindow()
 {
     delete m_itemContainer;
     delete ui;
-}
-
-void MainWindow::on_buttonCheck_clicked()
-{
-    ui->buttonCorrect->setVisible(true);
-    ui->buttonCheck->setVisible(false);
-    ui->buttonWrong->setVisible(true);
 }
 
 void MainWindow::menuLoad()
@@ -49,7 +43,7 @@ void MainWindow::menuLoad()
             msgBox.exec();
         }
     }
-
+    startNewGame( false );
 }
 
 void MainWindow::menuEdit()
@@ -97,3 +91,70 @@ void MainWindow::displayEditDialog()
     EditDialog* dlg = new EditDialog(this);
     dlg->exec();
 }
+
+void MainWindow::startNewGame( bool reloadItemContainer )
+{
+    if( reloadItemContainer )
+    {
+        m_itemContainer->reload();
+    }
+
+    setInformationLabels();
+    displayNextQuestion();
+}
+
+void MainWindow::setInformationLabels()
+{
+    ui->labelErrors->setText( QString("Errors: %1").arg(m_itemContainer->getNumberOfIncorrectAnswers()) );
+    ui->labelQuestionsLeft->setText( QString("Left: %1").arg(m_itemContainer->getNumberOfQuestionsLeft()) );
+}
+
+void MainWindow::displayNextQuestion()
+{
+    m_itemContainer->prepareNextQuestion();
+    const Item* curr = m_itemContainer->getCurrentQuestion();
+
+    if( !curr )
+    {
+        int e = m_itemContainer->getNumberOfIncorrectAnswers();
+        QMessageBox msgBox;
+        msgBox.setText("Test over");
+        msgBox.setInformativeText( QString("You finished test with %1 error%2.").arg(e).arg( (e==1) ? "" : "s" ) );
+        msgBox.setStandardButtons(QMessageBox::Close);
+        msgBox.setIcon(QMessageBox::NoIcon);
+        msgBox.exec();
+        close();
+    }
+    else
+    {
+        setInformationLabels();
+        ui->textEditQuestion->setText(curr->GetQuestion());
+        ui->textEditAnswer->setText("");
+        ui->pushButtonCheck->setVisible(true);
+        ui->pushButtonWrong->setVisible(false);
+        ui->pushButtonCorrect->setVisible(false);
+    }
+}
+
+void MainWindow::on_pushButtonCheck_clicked()
+{
+    const Item* curr = m_itemContainer->getCurrentQuestion();
+    QString ans = curr->GetAnswer() + "\n---\n" + curr->GetExample();
+    ui->textEditAnswer->setText(ans);
+    ui->pushButtonCheck->setVisible(false);
+    ui->pushButtonWrong->setVisible(true);
+    ui->pushButtonCorrect->setVisible(true);
+}
+
+void MainWindow::on_pushButtonWrong_clicked()
+{
+    m_itemContainer->currentQuestionAnsweredNotProperly();
+    displayNextQuestion();
+}
+
+void MainWindow::on_pushButtonCorrect_clicked()
+{
+    m_itemContainer->currentQuestionAnsweredProperly();
+    displayNextQuestion();
+}
+

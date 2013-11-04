@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>525</width>
-    <height>402</height>
+    <height>429</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,7 +24,32 @@
     <item>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QTextEdit" name="textEdit"/>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QLabel" name="labelErrors">
+          <property name="text">
+           <string>TextLabel</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="labelQuestionsLeft">
+          <property name="text">
+           <string>TextLabel</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QTextEdit" name="textEditQuestion">
+        <property name="cursorWidth">
+         <number>0</number>
+        </property>
+        <property name="textInteractionFlags">
+         <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+        </property>
+       </widget>
       </item>
       <item>
        <spacer name="verticalSpacer">
@@ -43,7 +68,14 @@
        </spacer>
       </item>
       <item>
-       <widget class="QTextEdit" name="textEdit_2"/>
+       <widget class="QTextEdit" name="textEditAnswer">
+        <property name="cursorWidth">
+         <number>0</number>
+        </property>
+        <property name="textInteractionFlags">
+         <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+        </property>
+       </widget>
       </item>
       <item>
        <spacer name="verticalSpacer_2">
@@ -74,23 +106,23 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="buttonWrong">
+         <widget class="QPushButton" name="pushButtonWrong">
           <property name="text">
-           <string>PushButton</string>
+           <string>Wrong</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="buttonCheck">
+         <widget class="QPushButton" name="pushButtonCheck">
           <property name="text">
-           <string>PushButton</string>
+           <string>Check</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="buttonCorrect">
+         <widget class="QPushButton" name="pushButtonCorrect">
           <property name="text">
-           <string>PushButton</string>
+           <string>Correct</string>
           </property>
          </widget>
         </item>

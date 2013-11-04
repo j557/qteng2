@@ -22,6 +22,7 @@ public:
     qulonglong reversableItemCount();
     void itemsAtIndex(int idx, Item** item, Item** revItem);
 
+    bool updateItemRank( const Item& item );
     bool updateItem( int id,
                      const QString& question,
                      const QString& answer,

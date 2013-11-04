@@ -1,5 +1,5 @@
 #include "item.h"
-//#include "randomizer.h"
+#include "randomizer.h"
 
 Item::Item( int id,
             const QString& question,
@@ -17,26 +17,18 @@ Item::Item( int id,
 , m_reversed( reversed )
 , m_rank( -100 )
 {
-
+    if( m_asked < 5 )
+    {
+        m_rank = Randomizer::getFloat( -2.f, -1.f );
+    }
+    else
+    {
+        m_rank = (float)m_answered / (float)m_asked;
+    }
 }
 
 float Item::GetRank() const
 {
-	if( m_rank == -100 )
-	{
-		//if question was not asked many times, return random rank with
-		//value lower than possible in other case
-		if( m_asked < 5 )
-		{
-            //TODO: use randomizer, but set this value in constructor maybe
-            //      and remove mutable attribute
-            //m_rank = Randomizer::getFloat( -2.f, -1.f );
-		}
-		else
-		{
-			m_rank = (float)m_answered / (float)m_asked;
-		}
-	}
 	return m_rank;
 }
 

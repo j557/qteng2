@@ -35,7 +35,8 @@ SOURCES += main.cpp \
     itemcontainer.cpp \
     item.cpp \
     editdialog.cpp \
-    databasemanager.cpp
+    databasemanager.cpp \
+    randomizer.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -46,7 +47,8 @@ HEADERS += \
     itemcontainer.h \
     item.h \
     editdialog.h \
-    databasemanager.h
+    databasemanager.h \
+    randomizer.h
 
 FORMS += \
     mainwindow.ui \
