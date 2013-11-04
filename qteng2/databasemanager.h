@@ -15,6 +15,7 @@ public:
         return instance;
     }
 
+    bool create( const QString& filename );
     bool open( const QString& filename );
     void close();
     qulonglong irreversableItemCount();

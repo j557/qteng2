@@ -21,6 +21,24 @@ ItemContainer::ItemContainer()
     clear();
 }
 
+ItemContainer::~ItemContainer()
+{
+    clear();
+}
+
+bool ItemContainer::create( const QString& filename )
+{
+    clear();
+
+    if( !DatabaseManager::getInstance().create( filename ) )
+    {
+        return false;
+    }
+    m_filename = filename;
+
+    return true;
+}
+
 bool ItemContainer::load( const QString& filename )
 {
     clear();
@@ -30,6 +48,7 @@ bool ItemContainer::load( const QString& filename )
     {
         return false;
     }
+    m_filename = filename;
 
     m_questionsCount = dbMan.irreversableItemCount() +  2 * dbMan.reversableItemCount();
 
@@ -125,6 +144,8 @@ int ItemContainer::getNumberOfQuestionsTotal() const
 
 void ItemContainer::clear()
 {
+    DatabaseManager::getInstance().close();
+
     m_filename = QString();
     qDeleteAll( m_items );
     m_items.clear();

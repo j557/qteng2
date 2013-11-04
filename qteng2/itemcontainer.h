@@ -55,6 +55,7 @@ class ItemContainer : public ItemContainerInterface
 
 public:
     ItemContainer();
+    virtual ~ItemContainer();
 
 public: //ItemsContainerInterface
     virtual void prepareNextQuestion();
@@ -65,6 +66,7 @@ public: //ItemsContainerInterface
     virtual int  getNumberOfCorrectAnswers() const;
     virtual int  getNumberOfQuestionsLeft() const;
     virtual int  getNumberOfQuestionsTotal() const;
+    virtual bool create( const QString& filename );
     virtual bool load( const QString& filename );
     virtual bool reload();
 

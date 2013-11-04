@@ -17,6 +17,42 @@ DatabaseManager::DatabaseManager()
 {
 }
 
+bool DatabaseManager::create( const QString& filename )
+{
+    close();
+
+    if( !filename.length() )
+    {
+        qDebug("DB ERROR: empty filename");
+        return false;
+    }
+
+    //TODO:check, that file does not exist
+
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName( filename );
+
+    // Open databasee
+    if( !m_db.open() )
+    {
+        qDebug("DB ERROR: create/open error");
+        return false;
+    }
+
+    QSqlQuery createTableQuery;
+    bool ok = createTableQuery.exec("CREATE TABLE Item (id integer primary key,question text,answer text,example text,"
+                                    "reversable boolean,timesAsked integer,timesCorrect integer,"
+                                    "timesAskedReversed integer,timesCorrectReversed integer)");
+    if( !ok )
+    {
+        m_db.close();
+        qDebug("DB ERROR: create table error");
+        return false;
+    }
+
+    return true;
+}
+
 bool DatabaseManager::open( const QString& filename )
 {
     close();

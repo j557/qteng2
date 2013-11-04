@@ -19,8 +19,12 @@ public:
     
 private slots:
     void on_buttonCheck_clicked();
+    void menuNew();
     void menuLoad();
     void menuEdit();
+
+private:
+    void displayEditDialog();
 
 private:
     ItemContainer* m_itemContainer;

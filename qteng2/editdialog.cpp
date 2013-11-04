@@ -13,7 +13,14 @@ EditDialog::EditDialog(QWidget *parent) :
     m_currentItemRev = NULL;
     m_currentItemIdx = 0;
 
-    updateFieldsToCurrentElement();
+    if( itemCount() > 0 )
+    {
+        updateFieldsToCurrentElement();
+    }
+    else
+    {
+        createNewItem();
+    }
 }
 
 EditDialog::~EditDialog()
@@ -159,7 +166,10 @@ void EditDialog::on_pushButtonNew_clicked()
 void EditDialog::createNewItem( const QString& question, const QString& answer, const QString& example )
 {
     //save changes in current element
-    updateElementInDatabase();
+    if( m_currentItem )//may be null if database is empty
+    {
+        updateElementInDatabase();
+    }
 
     //prepare dialog for new element
     delete m_currentItem;
